@@ -9,6 +9,12 @@ import java.util.List;
 
 public class Plateau {
 
+
+    private int largeur;
+    private int haureur;
+    private List<Joueur> joueurs;
+    private EtatPartie etatPartie;
+    private int posJoueurCourant;
     /**
      * Construit un nouveau plateau de jeu vide
      * @param largeur la largeur du plateau
@@ -18,7 +24,17 @@ public class Plateau {
      * @throws JoueurException si le nombre de joueurs est invalide (5 max)
      */
     public Plateau(int largeur, int hauteur, List<Joueur> joueurs) throws PlateauInvalideException, JoueurException {
-     // TODO
+        if (joueurs.size()> 5  || joueurs.size() < 2) {
+            throw new JoueurException();
+        }
+        if (largeur < 4 || hauteur < 4 ){
+            throw new PlateauInvalideException();
+        }
+        this.etatPartie = EtatPartie.EN_COURS;
+        this.joueurs = joueurs;
+        this.largeur = largeur;
+        this.haureur = hauteur;
+        this.posJoueurCourant = 0;
     }
 
     /**
@@ -27,7 +43,7 @@ public class Plateau {
      */
     public int getLargeur() {
         // TODO
-        return -1;
+        return this.largeur;
     }
 
     /**
@@ -36,7 +52,7 @@ public class Plateau {
      */
     public int getHauteur() {
         // TODO
-        return -1;
+        return this.haureur;
     }
 
     /**
@@ -45,8 +61,12 @@ public class Plateau {
      * @throws JoueurException si personne ne doit jouer (fin de partie...)
      */
     public Joueur getJoueurCourant() throws JoueurException {
-        // TODO
-        return null;
+       if (this.posJoueurCourant < 0 || this.posJoueurCourant > this.joueurs.size()){
+           throw JoueurException;
+       }else {
+           return this.joueurs.get(this.posJoueurCourant);
+       }
+
     }
 
     /**
@@ -58,8 +78,13 @@ public class Plateau {
      * @throws JoueurException si ce n'est pas a ce joueur de jouer
      */
     public EtatPartie jouer(Joueur j, int colonne) throws ColonneInvalideException, ColonnePleineException, JoueurException {
-        // TODO
-        return EtatPartie.EN_COURS;
+        if (!j.equals(this.joueurs.get(this.posJoueurCourant))){
+            throw JoueurException;
+        }
+        if(this.largeur < colonne){
+            throw ColonneInvalideException;
+        }
+        return this.etatPartie;
     }
 
     /**

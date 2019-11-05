@@ -1,5 +1,7 @@
 package com.iutlr.puissance4;
 
+import android.support.annotation.Nullable;
+
 class Joueur {
 
     private String nom;
@@ -28,5 +30,10 @@ class Joueur {
      */
     public int getImageResId() {
         return this.imageResId;
+    }
+
+
+    public boolean equals(Joueur j) {
+        return this.imageResId == j.imageResId;
     }
 }
