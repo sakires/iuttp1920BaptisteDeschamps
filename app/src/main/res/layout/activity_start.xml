@@ -6,11 +6,113 @@
     android:layout_height="match_parent"
     tools:context=".StartActivity">
 
-    <TableLayout
-        android:layout_width="409dp"
-        android:layout_height="729dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView_joueur1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Joueur 1" />
+
+            <TextView
+                android:id="@+id/textView_joueur2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Joueur 2" />
+
+            <TextView
+                android:id="@+id/textView_joueur3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Joueur 3" />
+
+            <TextView
+                android:id="@+id/textView_joueur4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Joueur 4" />
+
+            <TextView
+                android:id="@+id/textView_joueur5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:text="Joueur 5" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/img_joueur1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:contentDescription="imageJoueur1"
+                app:srcCompat="@android:color/holo_red_dark" />
+
+            <ImageView
+                android:id="@+id/img_joueur2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:contentDescription="imageJoueur2"
+                app:srcCompat="@android:color/holo_blue_dark" />
+
+            <ImageView
+                android:id="@+id/img_joueur3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:contentDescription="imageJoueur3"
+                app:srcCompat="#009688" />
+
+            <ImageView
+                android:id="@+id/img_joueur4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:contentDescription="imageJoueur4"
+                app:srcCompat="#FFEB3B" />
+
+            <ImageView
+                android:id="@+id/img_joueur5"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:contentDescription="Joueur"
+                app:srcCompat="#673AB7" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/indicationPartie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>
