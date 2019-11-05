@@ -2,13 +2,16 @@ package com.iutlr.puissance4;
 
 class Joueur {
 
+    private String nom;
+    private int imageResId;
     /**
      * Crée un joueur
      * @param nom le nom du joueur
      * @param imageResId l'id de resource de l'image representant le joueur
      */
     public Joueur(String nom, int imageResId) {
-        // TODO
+        this.nom = nom;
+        this.imageResId = imageResId;
     }
 
     /**
@@ -16,7 +19,7 @@ class Joueur {
      * @return le nom du joueur
      */
     public String getNom() {
-        return null;
+        return this.nom;
     }
 
     /**
@@ -24,6 +27,6 @@ class Joueur {
      * @return l'id de resource de l'image representant le joueur
      */
     public int getImageResId() {
-        return -1;
+        return this.imageResId;
     }
 }
