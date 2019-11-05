@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Puissance4</string>
+    <string name="image_joueur">image de joueur</string>
+    <string name="joueur_1">Joueur 1</string>
+    <string name="joueur_2">Joueur 2</string>
+    <string name="joueur_3">Joueur 3</string>
+    <string name="joueur_4">Joueur 4</string>
+    <string name="joueur_5">Joueur 5</string>
+    <string name="nombre_de_joueur">Nombre de joueur</string>
+    <string name="hauteur">Hauteur</string>
+    <string name="largeur">Largeur</string>
+    <string name="joueur">Joueur</string>
+    <string name="_2">2</string>
+    <string name="_3">3</string>
+    <string name="_4">4</string>
+    <string name="_5">5</string>
 </resources>

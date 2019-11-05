@@ -62,7 +62,7 @@ public class Plateau {
      */
     public Joueur getJoueurCourant() throws JoueurException {
        if (this.posJoueurCourant < 0 || this.posJoueurCourant > this.joueurs.size()){
-           throw JoueurException;
+           throw new JoueurException();
        }else {
            return this.joueurs.get(this.posJoueurCourant);
        }
@@ -79,10 +79,10 @@ public class Plateau {
      */
     public EtatPartie jouer(Joueur j, int colonne) throws ColonneInvalideException, ColonnePleineException, JoueurException {
         if (!j.equals(this.joueurs.get(this.posJoueurCourant))){
-            throw JoueurException;
+            throw new JoueurException();
         }
         if(this.largeur < colonne){
-            throw ColonneInvalideException;
+            throw new ColonneInvalideException();
         }
         return this.etatPartie;
     }
