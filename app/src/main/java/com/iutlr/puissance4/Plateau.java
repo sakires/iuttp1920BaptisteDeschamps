@@ -98,6 +98,13 @@ public class Plateau {
             }
         }
         this.plateau[colonne][i] = j.getImageResId();
+        if (plateauPlein()){
+            this.etatPartie = EtatPartie.EGAL;
+        }
+        if (victoire(j,colonne,i)){
+            this.etatPartie = EtatPartie.VICTOIRE;
+            this.gagnant = j;
+        }
 
         return this.etatPartie;
     }
@@ -124,5 +131,88 @@ public class Plateau {
                 plateau[i][j] = -1;
 ;            }
         }
+    }
+
+    private boolean victoire(Joueur j,int posX,int posY){
+
+        if(victoireHorizontal(j, posX, posY)) return true;
+        if(victoireVertical(j, posX, posY)) return true;
+        if (victoireDiagonaleHaut(j, posX, posY)) return true;
+        if (victoireDiagonaleBas(j, posX, posY)) return true;
+        return false;
+    }
+    private boolean victoireHorizontal(Joueur j, int posX, int posY){
+        int compteur = 0;
+
+        // test victoire horizontal
+        while (posX<largeur && this.plateau[posX][posY] == j.getImageResId()){
+            compteur++;
+            posX++;
+        }
+        while (posX>=0 && this.plateau[posX][posY] == j.getImageResId()){
+            compteur++;
+            posX--;
+        }
+        return compteur==4;
+    }
+    private boolean victoireVertical(Joueur j, int posX, int posY){
+        int compteur = 0;
+
+        //test victoire vertical
+        while (posY<haureur && this.plateau[posX][posY] == j.getImageResId()){
+            compteur++;
+            posY++;
+        }
+        while (posY>=0 && this.plateau[posX][posY] == j.getImageResId()){
+            compteur++;
+            posY--;
+        }
+        return compteur==4;
+    }
+    private boolean victoireDiagonaleBas(Joueur j, int posX, int posY) {
+        int compteur;
+        compteur = 0;
+        //testdiagonal bas
+        while(posX<largeur && posY>=0 && plateau[posX][posY] == j.getImageResId()){
+            compteur++;
+            posX++;
+            posY--;
+        }
+        while(posX>=00 && posY<haureur && plateau[posX][posY] == j.getImageResId()){
+            compteur++;
+            posX--;
+            posY++;
+        }
+        return compteur==4;
+    }
+
+    private boolean victoireDiagonaleHaut(Joueur j,int posX,int posY){
+        int compteur = 0;
+        //test diagonal haut
+        while(posX<largeur && posY<haureur && plateau[posX][posY] == j.getImageResId()){
+            compteur++;
+            posX++;
+            posY++;
+        }
+        while(posX<largeur && posY<haureur && plateau[posX][posY] == j.getImageResId()){
+            compteur++;
+            posX--;
+            posY--;
+        }
+        return compteur==4;
+    }
+
+    private boolean plateauPlein(){
+        int x = 0;
+        int y = 0;
+        while(x < largeur){
+            while (y < haureur){
+                if(plateau[x][y] != -1) return false;
+                y++;
+            }
+            x++;
+            y = 0;
+        }
+        return true;
     }
 }
