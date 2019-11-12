@@ -15,6 +15,8 @@ public class Plateau {
     private List<Joueur> joueurs;
     private EtatPartie etatPartie;
     private int posJoueurCourant;
+    // [largeur][hauteur]
+    private int[][] plateau;
     private Joueur gagnant;
     /**
      * Construit un nouveau plateau de jeu vide
@@ -35,7 +37,10 @@ public class Plateau {
         this.joueurs = joueurs;
         this.largeur = largeur;
         this.haureur = hauteur;
+        this.plateau = new int[largeur][hauteur];
         this.posJoueurCourant = 0;
+
+        initPlateau();
     }
 
     /**
@@ -85,6 +90,15 @@ public class Plateau {
         if(this.largeur < colonne){
             throw new ColonneInvalideException();
         }
+        int i = 0;
+        while(this.plateau[colonne][i] == -1 ){
+            i++;
+            if(i >= haureur){
+                throw new ColonnePleineException();
+            }
+        }
+        this.plateau[colonne][i] = j.getImageResId();
+
         return this.etatPartie;
     }
 
@@ -97,6 +111,18 @@ public class Plateau {
             return this.gagnant;
         }else {
             return null;
+        }
+    }
+
+
+    /**
+     * permet d'initialisé le plateau
+     */
+    private void initPlateau(){
+        for (int i =0;i<largeur;i++){
+            for(int j=0;j<haureur;j++){
+                plateau[i][j] = -1;
+;            }
         }
     }
 }
