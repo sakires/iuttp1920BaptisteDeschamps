@@ -91,11 +91,11 @@ public class Plateau {
             throw new ColonneInvalideException();
         }
         int i = 0;
-        while(this.plateau[colonne][i] == -1 ){
-            i++;
+        while(this.plateau[colonne][i] != -1 ){
             if(i >= haureur){
                 throw new ColonnePleineException();
             }
+            i++;
         }
         this.plateau[colonne][i] = j.getImageResId();
         if (plateauPlein()){
@@ -105,7 +105,7 @@ public class Plateau {
             this.etatPartie = EtatPartie.VICTOIRE;
             this.gagnant = j;
         }
-
+        joueurSuivant();
         return this.etatPartie;
     }
 
@@ -143,63 +143,73 @@ public class Plateau {
     }
     private boolean victoireHorizontal(Joueur j, int posX, int posY){
         int compteur = 0;
-
+        int x = posX;
         // test victoire horizontal
-        while (posX<largeur && this.plateau[posX][posY] == j.getImageResId()){
+        while (x<largeur && this.plateau[x][posY] == j.getImageResId()){
             compteur++;
-            posX++;
+            x++;
         }
-        while (posX>=0 && this.plateau[posX][posY] == j.getImageResId()){
+        x = posX;
+        while (x>=0 && this.plateau[x][posY] == j.getImageResId()){
             compteur++;
-            posX--;
+            x--;
         }
-        return compteur==4;
+        return compteur>=4;
     }
     private boolean victoireVertical(Joueur j, int posX, int posY){
         int compteur = 0;
-
+        int y = posY;
         //test victoire vertical
-        while (posY<haureur && this.plateau[posX][posY] == j.getImageResId()){
+        while (y<haureur && this.plateau[posX][y] == j.getImageResId()){
             compteur++;
-            posY++;
+            y++;
         }
-        while (posY>=0 && this.plateau[posX][posY] == j.getImageResId()){
+        y = posY;
+        while (y>=0 && this.plateau[posX][y] == j.getImageResId()){
             compteur++;
-            posY--;
+            y--;
         }
-        return compteur==4;
+        return compteur>=4;
     }
     private boolean victoireDiagonaleBas(Joueur j, int posX, int posY) {
         int compteur;
+        int x = posX;
+        int y = posY;
         compteur = 0;
         //testdiagonal bas
-        while(posX<largeur && posY>=0 && plateau[posX][posY] == j.getImageResId()){
+        while(x<largeur && y>=0 && plateau[x][y] == j.getImageResId()){
             compteur++;
-            posX++;
-            posY--;
+            x++;
+            y--;
         }
-        while(posX>=00 && posY<haureur && plateau[posX][posY] == j.getImageResId()){
+        x = posX;
+        y = posY;
+        while(x>=0 && y<haureur && plateau[x][y] == j.getImageResId()){
             compteur++;
-            posX--;
-            posY++;
+            x--;
+            y++;
         }
-        return compteur==4;
+        return compteur>=4;
     }
 
     private boolean victoireDiagonaleHaut(Joueur j,int posX,int posY){
         int compteur = 0;
+        int x = posX;
+        int y = posY;
         //test diagonal haut
-        while(posX<largeur && posY<haureur && plateau[posX][posY] == j.getImageResId()){
+        while(x<largeur && y<haureur && plateau[x][y] == j.getImageResId()){
             compteur++;
-            posX++;
-            posY++;
+            x++;
+            y++;
         }
-        while(posX<largeur && posY<haureur && plateau[posX][posY] == j.getImageResId()){
+        x = posX;
+        y = posY;
+        while(x>=0 && y>=0 && plateau[x][y] == j.getImageResId()){
             compteur++;
-            posX--;
-            posY--;
+            x--;
+            y--;
         }
-        return compteur==4;
+        return compteur>=4;
     }
 
     private boolean plateauPlein(){
@@ -214,5 +224,8 @@ public class Plateau {
             y = 0;
         }
         return true;
+    }
+    private void joueurSuivant(){
+        this.posJoueurCourant = (posJoueurCourant + 1) % joueurs.size();
     }
 }
