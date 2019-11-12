@@ -11,7 +11,7 @@ import android.widget.RadioGroup;
 
 public class ConfigurateActivity extends AppCompatActivity {
 
-    private RadioButton r2,r3,r4,r5;
+
     private RadioGroup radioGroup;
     private Button btn_joueur;
     private EditText largeur,hauteur;
@@ -26,11 +26,15 @@ public class ConfigurateActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int nbJoueur = nbJoueur();
-                if(nbJoueur == -1){
+                //verifier aussi la hauteur et la largeur
+                if(nbJoueur == -1 ){
                     // faire boite de dialog
                 }else{
                     Intent startPartie = new Intent(ConfigurateActivity.this,StartActivity.class);
                     // Rajouter les extra
+                    startPartie.putExtra("NBJOUEUR",nbJoueur);
+                    startPartie.putExtra("HAUTEUR",hauteur.getText().toString());
+                    startPartie.putExtra("LARGEUR",largeur.getText().toString());
                     startActivity(startPartie);
                     finish();
                 }
@@ -41,10 +45,6 @@ public class ConfigurateActivity extends AppCompatActivity {
     private void init(){
         btn_joueur  = (Button)      findViewById(R.id.play_Btn);
         radioGroup  = (RadioGroup)  findViewById(R.id.radioGroup);
-        r2          = (RadioButton) findViewById(R.id.r2);
-        r3          = (RadioButton) findViewById(R.id.r3);
-        r4          = (RadioButton) findViewById(R.id.r4);
-        r5          = (RadioButton) findViewById(R.id.r5);
         largeur     = (EditText)    findViewById(R.id.largeur);
         hauteur     = (EditText)    findViewById(R.id.hauteur);
     }

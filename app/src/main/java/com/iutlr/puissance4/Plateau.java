@@ -15,6 +15,7 @@ public class Plateau {
     private List<Joueur> joueurs;
     private EtatPartie etatPartie;
     private int posJoueurCourant;
+    private Joueur gagnant;
     /**
      * Construit un nouveau plateau de jeu vide
      * @param largeur la largeur du plateau
@@ -92,7 +93,10 @@ public class Plateau {
      * @return le gagnant si un joueur a déjà gagné, null sinon
      */
     public Joueur getGagnant() {
-        // TODO
-        return null;
+        if (this.etatPartie == EtatPartie.VICTOIRE){
+            return this.gagnant;
+        }else {
+            return null;
+        }
     }
 }
