@@ -69,10 +69,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:autofillHints="@string/hauteur"
                 android:ems="10"
-                android:inputType="number"
-                android:text="@string/hauteur"
-                android:autofillHints="@string/hauteur"/>
+                android:hint="@string/hauteur"
+                android:inputType="number" />
         </LinearLayout>
 
         <LinearLayout
@@ -85,10 +85,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:autofillHints="@string/largeur"
                 android:ems="10"
-                android:inputType="number"
-                android:text="@string/largeur"
-                android:autofillHints="@string/largeur"/>
+                android:hint="@string/largeur"
+                android:inputType="number" />
         </LinearLayout>
     </LinearLayout>
 

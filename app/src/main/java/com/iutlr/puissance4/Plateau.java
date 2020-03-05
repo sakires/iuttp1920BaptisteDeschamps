@@ -9,6 +9,13 @@ import java.util.List;
 
 public class Plateau {
 
+    public static final int NOMBRE_JOUEUR_MIN = 2;
+    public static final int NOMBRE_JOUEUR_MAX = 5;
+    public static final int HAUTEUR_MIN = 4;
+    public static final int LARGEUR_MIN = 4;
+
+
+    private final int marqueurCaseVide = -1;
 
     private int largeur;
     private int haureur;
@@ -27,10 +34,10 @@ public class Plateau {
      * @throws JoueurException si le nombre de joueurs est invalide (5 max)
      */
     public Plateau(int largeur, int hauteur, List<Joueur> joueurs) throws PlateauInvalideException, JoueurException {
-        if (joueurs.size()> 5  || joueurs.size() < 2) {
+        if (joueurs.size()> NOMBRE_JOUEUR_MAX  || joueurs.size() < NOMBRE_JOUEUR_MIN) {
             throw new JoueurException();
         }
-        if (largeur < 4 || hauteur < 4 ){
+        if (largeur < LARGEUR_MIN || hauteur < HAUTEUR_MIN ){
             throw new PlateauInvalideException();
         }
         this.etatPartie = EtatPartie.EN_COURS;
@@ -87,11 +94,11 @@ public class Plateau {
         if (!j.equals(this.joueurs.get(this.posJoueurCourant))){
             throw new JoueurException();
         }
-        if(this.largeur < colonne){
+        if(this.largeur < colonne || colonne < 0){
             throw new ColonneInvalideException();
         }
         int i = 0;
-        while(this.plateau[colonne][i] != -1 ){
+        while(this.plateau[colonne][i] != this.marqueurCaseVide){
             if(i >= haureur){
                 throw new ColonnePleineException();
             }
@@ -128,7 +135,7 @@ public class Plateau {
     private void initPlateau(){
         for (int i =0;i<largeur;i++){
             for(int j=0;j<haureur;j++){
-                plateau[i][j] = -1;
+                plateau[i][j] = this.marqueurCaseVide;
 ;            }
         }
     }
@@ -149,7 +156,7 @@ public class Plateau {
             compteur++;
             x++;
         }
-        x = posX;
+        x = posX - 1;
         while (x>=0 && this.plateau[x][posY] == j.getImageResId()){
             compteur++;
             x--;
@@ -160,15 +167,16 @@ public class Plateau {
         int compteur = 0;
         int y = posY;
         //test victoire vertical
-        while (y<haureur && this.plateau[posX][y] == j.getImageResId()){
-            compteur++;
-            y++;
-        }
-        y = posY;
+//        while (y<haureur && this.plateau[posX][y] == j.getImageResId()){
+//            compteur++;
+//            y++;
+//        }
+//        y = posY-1;
         while (y>=0 && this.plateau[posX][y] == j.getImageResId()){
             compteur++;
             y--;
         }
+
         return compteur>=4;
     }
     private boolean victoireDiagonaleBas(Joueur j, int posX, int posY) {
@@ -182,8 +190,8 @@ public class Plateau {
             x++;
             y--;
         }
-        x = posX;
-        y = posY;
+        x = posX-1;
+        y = posY+1;
         while(x>=0 && y<haureur && plateau[x][y] == j.getImageResId()){
             compteur++;
             x--;
@@ -202,8 +210,8 @@ public class Plateau {
             x++;
             y++;
         }
-        x = posX;
-        y = posY;
+        x = posX-1;
+        y = posY-1;
         while(x>=0 && y>=0 && plateau[x][y] == j.getImageResId()){
             compteur++;
             x--;
@@ -217,7 +225,7 @@ public class Plateau {
         int y = 0;
         while(x < largeur){
             while (y < haureur){
-                if(plateau[x][y] != -1) return false;
+                if(plateau[x][y] == this.marqueurCaseVide) return false;
                 y++;
             }
             x++;

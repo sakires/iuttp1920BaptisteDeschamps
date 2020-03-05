@@ -111,14 +111,66 @@ public class ExampleUnitTest {
 
         p.jouer(j1,4);
         p.jouer(j2,3);
+
         p.jouer(j1,3);
         p.jouer(j2,2);
+
         p.jouer(j1,2);
         p.jouer(j2,1);
+
         p.jouer(j1,2);
         p.jouer(j2,1);
+
+        p.jouer(j1,1);
+        p.jouer(j2,5);
+
         p.jouer(j1,1);
 
         assertEquals(j1, p.getGagnant());
+    }
+
+    @Test
+    public void gameEqual() throws Exception{
+        Joueur j1 = new Joueur("J1", 0);
+        Joueur j2 = new Joueur("J2", 1);
+
+        List<Joueur> joueurs = new ArrayList<>();
+        joueurs.add(j1);
+        joueurs.add(j2);
+
+        Plateau p = new Plateau(4, 5, joueurs);
+
+        p.jouer(j1,0);
+        p.jouer(j2,1);
+
+        p.jouer(j1,0);
+        p.jouer(j2,1);
+
+        p.jouer(j1,0);
+        p.jouer(j2,1);
+
+        p.jouer(j1,1);
+        p.jouer(j2,0);
+
+        p.jouer(j1,0);
+        p.jouer(j2,1);
+
+        //
+        p.jouer(j1,2);
+        p.jouer(j2,3);
+
+        p.jouer(j1,2);
+        p.jouer(j2,3);
+
+        p.jouer(j1,2);
+        p.jouer(j2,3);
+
+        p.jouer(j1,3);
+        p.jouer(j2,2);
+
+        assertEquals(EtatPartie.EN_COURS,p.jouer(j1,2));
+        assertEquals(EtatPartie.EGAL,p.jouer(j2,3));
+
+        assertNull(p.getGagnant());
     }
 }

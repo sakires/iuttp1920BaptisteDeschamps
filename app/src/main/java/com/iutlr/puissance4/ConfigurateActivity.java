@@ -8,6 +8,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
+
+import com.iutlr.puissance4.exceptions.JoueurException;
+import com.iutlr.puissance4.exceptions.PlateauInvalideException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConfigurateActivity extends AppCompatActivity {
 
@@ -26,10 +33,13 @@ public class ConfigurateActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int nbJoueur = nbJoueur();
-                //verifier aussi la hauteur et la largeur
-                if(nbJoueur == -1 ){
-                    // faire boite de dialog
-                }else{
+                if(nbJoueur == -1 || nbJoueur > Plateau.NOMBRE_JOUEUR_MAX  || nbJoueur < Plateau.NOMBRE_JOUEUR_MIN ){
+                    Toast.makeText(ConfigurateActivity.this,ConfigurateActivity.this.getString(R.string.nbJoueurError),Toast.LENGTH_LONG).show();
+                }else if(Integer.parseInt(hauteur.getText().toString()) < Plateau.HAUTEUR_MIN){
+                    Toast.makeText(ConfigurateActivity.this,ConfigurateActivity.this.getString(R.string.hauteurPlateauError)+Plateau.HAUTEUR_MIN,Toast.LENGTH_LONG).show();
+                }else if(Integer.parseInt(largeur.getText().toString()) < Plateau.LARGEUR_MIN){
+                    Toast.makeText(ConfigurateActivity.this,ConfigurateActivity.this.getString(R.string.LargeurPlateauError)+Plateau.LARGEUR_MIN,Toast.LENGTH_LONG).show();
+                } else{
                     Intent startPartie = new Intent(ConfigurateActivity.this,StartActivity.class);
                     // Rajouter les extra
                     startPartie.putExtra("NBJOUEUR",nbJoueur);

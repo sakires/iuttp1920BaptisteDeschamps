@@ -14,4 +14,7 @@
     <string name="_3">3</string>
     <string name="_4">4</string>
     <string name="_5">5</string>
+    <string name="nbJoueurError">Nombre de joueurs incorrect</string>
+    <string name="hauteurPlateauError">La hauteur du plateau doit être supérieur à </string>
+    <string name="LargeurPlateauError">La largeur du plateau doit être supérieur à </string>
 </resources>
