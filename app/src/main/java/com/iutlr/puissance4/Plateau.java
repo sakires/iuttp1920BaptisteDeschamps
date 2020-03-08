@@ -94,15 +94,15 @@ public class Plateau {
         if (!j.equals(this.joueurs.get(this.posJoueurCourant))){
             throw new JoueurException();
         }
-        if(this.largeur < colonne || colonne < 0){
+        if(this.largeur <= colonne || 0 > colonne){
             throw new ColonneInvalideException();
         }
         int i = 0;
-        while(this.plateau[colonne][i] != this.marqueurCaseVide){
-            if(i >= haureur){
-                throw new ColonnePleineException();
-            }
+        while(i < haureur && this.plateau[colonne][i] != this.marqueurCaseVide){
             i++;
+        }
+        if(i >= haureur){
+            throw new ColonnePleineException();
         }
         this.plateau[colonne][i] = j.getImageResId();
         if (plateauPlein()){
@@ -180,10 +180,9 @@ public class Plateau {
         return compteur>=4;
     }
     private boolean victoireDiagonaleBas(Joueur j, int posX, int posY) {
-        int compteur;
+        int compteur = 0;
         int x = posX;
         int y = posY;
-        compteur = 0;
         //testdiagonal bas
         while(x<largeur && y>=0 && plateau[x][y] == j.getImageResId()){
             compteur++;

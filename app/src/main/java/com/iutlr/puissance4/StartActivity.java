@@ -1,13 +1,20 @@
 package com.iutlr.puissance4;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.iutlr.puissance4.exceptions.ColonneInvalideException;
+import com.iutlr.puissance4.exceptions.ColonnePleineException;
 import com.iutlr.puissance4.exceptions.JoueurException;
 import com.iutlr.puissance4.exceptions.PlateauInvalideException;
 
@@ -28,8 +35,11 @@ public class StartActivity extends AppCompatActivity {
     private ImageView imageJ4;
     private ImageView imageJ5;
 
+    private LinearLayout plateauDeJeux;
     private List<Joueur> joueurs;
     private Plateau plateau;
+
+    private String forOnClick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +63,76 @@ public class StartActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (JoueurException e) {
             e.printStackTrace();
+        }
+        
+        initPlateau();
+    }
+
+    private void initPlateau() {
+        Drawable border = (Drawable) getDrawable(R.drawable.customborder);
+        ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT,1);
+        for(int i = 0;i<plateau.getLargeur();i++){
+            final LinearLayout colonne = new LinearLayout(this);
+            colonne.setLayoutParams(params);
+            colonne.setOrientation(LinearLayout.VERTICAL);
+            colonne.setBackground(border);
+            colonne.setGravity(Gravity.BOTTOM);
+            this.forOnClick = String.valueOf(i);
+            final int fi = i;
+            colonne.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Joueur joueurCoutant = plateau.getJoueurCourant();
+                        EtatPartie etatPartie = plateau.jouer(joueurCoutant,fi);
+                        placementPion(joueurCoutant);
+                        if (etatPartie.equals(EtatPartie.VICTOIRE)){
+                            Toast.makeText(StartActivity.this,"GG WP tu as gagner",Toast.LENGTH_LONG).show();
+                        }
+                        if (etatPartie.equals(EtatPartie.EGAL)){
+                            Toast.makeText(StartActivity.this,"Egalité",Toast.LENGTH_LONG).show();
+                        }
+                    } catch (ColonneInvalideException e) {
+                        Toast.makeText(StartActivity.this,"Vous ne pouvez pas jouer sur cette colonne",Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    } catch (ColonnePleineException e) {
+                        Toast.makeText(StartActivity.this,"Cette colonne est pleine",Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    } catch (JoueurException e) {
+                        Toast.makeText(StartActivity.this,"joueur invalide",Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+//                    Toast.makeText(StartActivity.this,"Joueur suivant",Toast.LENGTH_LONG).show();
+                }
+
+                private void placementPion(Joueur joueurCoutant) {
+                    Drawable border = (Drawable) getDrawable(R.drawable.customborder);
+                    ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, colonne.getHeight()/plateau.getHauteur());
+                    ImageView img = new ImageView(StartActivity.this);
+                    img.setLayoutParams(params);
+                    img.setBackground(border);
+                    switch (joueurCoutant.getImageResId()){
+                        case R.id.img_joueur1:
+                            img.setImageDrawable(imageJ1.getDrawable());
+                            break;
+                        case R.id.img_joueur2:
+                            img.setImageDrawable(imageJ2.getDrawable());
+                            break;
+                        case R.id.img_joueur3:
+                            img.setImageDrawable(imageJ3.getDrawable());
+                            break;
+                        case R.id.img_joueur4:
+                            img.setImageDrawable(imageJ4.getDrawable());
+                            break;
+                        case R.id.img_joueur5:
+                            img.setImageDrawable(imageJ5.getDrawable());
+                            break;
+                    }
+
+                    colonne.addView(img,0);
+                }
+            });
+            plateauDeJeux.addView(colonne);
         }
     }
 
@@ -95,5 +175,7 @@ public class StartActivity extends AppCompatActivity {
         this.imageJ3 = findViewById(R.id.img_joueur3);
         this.imageJ4 = findViewById(R.id.img_joueur4);
         this.imageJ5 = findViewById(R.id.img_joueur5);
+
+        this.plateauDeJeux = findViewById(R.id.plateau);
     }
 }
