@@ -29,6 +29,21 @@ public class ConfigurateActivity extends AppCompatActivity {
 
         init();
 
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case 0:
+                        Toast.makeText(ConfigurateActivity.this,"2 j",Toast.LENGTH_LONG).show();
+                    case 1:
+                        Toast.makeText(ConfigurateActivity.this,"3 j",Toast.LENGTH_LONG).show();
+                    case 2:
+                        Toast.makeText(ConfigurateActivity.this,"4 j",Toast.LENGTH_LONG).show();
+                    case 3:
+                        Toast.makeText(ConfigurateActivity.this,"5 j",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         btn_joueur.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

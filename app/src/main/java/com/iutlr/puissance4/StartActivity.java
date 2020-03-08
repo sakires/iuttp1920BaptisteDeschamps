@@ -1,5 +1,7 @@
 package com.iutlr.puissance4;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -39,7 +41,9 @@ public class StartActivity extends AppCompatActivity {
     private List<Joueur> joueurs;
     private Plateau plateau;
 
-    private String forOnClick;
+    private int hauteur;
+    private int largeur;
+    private int nbJoueur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +53,19 @@ public class StartActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        int hauteur = Integer.parseInt(intent.getStringExtra("HAUTEUR"));
-        int largeur = Integer.parseInt(intent.getStringExtra("LARGEUR"));
-        int nbJoueur = intent.getIntExtra("NBJOUEUR",2);
+        this.hauteur = Integer.parseInt(intent.getStringExtra("HAUTEUR"));
+        this.largeur = Integer.parseInt(intent.getStringExtra("LARGEUR"));
+        this.nbJoueur = intent.getIntExtra("NBJOUEUR",2);
 
+        initGame();
+    }
+
+    private void nouvellePartie(){
+        this.plateauDeJeux.removeAllViews();
+        this.plateau = null;
+        initGame();
+    }
+    private void initGame() {
         initField();
         this.joueurs = new ArrayList<Joueur>();
         initJoueur(nbJoueur);
@@ -64,7 +77,7 @@ public class StartActivity extends AppCompatActivity {
         } catch (JoueurException e) {
             e.printStackTrace();
         }
-        
+
         initPlateau();
     }
 
@@ -77,7 +90,6 @@ public class StartActivity extends AppCompatActivity {
             colonne.setOrientation(LinearLayout.VERTICAL);
             colonne.setBackground(border);
             colonne.setGravity(Gravity.BOTTOM);
-            this.forOnClick = String.valueOf(i);
             final int fi = i;
             colonne.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -87,10 +99,44 @@ public class StartActivity extends AppCompatActivity {
                         EtatPartie etatPartie = plateau.jouer(joueurCoutant,fi);
                         placementPion(joueurCoutant);
                         if (etatPartie.equals(EtatPartie.VICTOIRE)){
-                            Toast.makeText(StartActivity.this,"GG WP tu as gagner",Toast.LENGTH_LONG).show();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(StartActivity.this);
+                            builder.setMessage("GG WP, "+plateau.getGagnant().getNom()+" tu as gagner,\n Voulez-vous rejouez avec les memes régalges");
+                            builder.setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent menuPrincipale = new Intent(StartActivity.this,ConfigurateActivity.class);
+                                    startActivity(menuPrincipale);
+                                    StartActivity.this.finish();
+                                }
+                            });
+                            builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    StartActivity.this.nouvellePartie();
+                                }
+                            });
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
                         }
                         if (etatPartie.equals(EtatPartie.EGAL)){
-                            Toast.makeText(StartActivity.this,"Egalité",Toast.LENGTH_LONG).show();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(StartActivity.this);
+                            builder.setMessage("Egalité, \n Voulez-vous rejouez avec les memes régalges");
+                            builder.setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent menuPrincipale = new Intent(StartActivity.this,ConfigurateActivity.class);
+                                    startActivity(menuPrincipale);
+                                    StartActivity.this.finish();
+                                }
+                            });
+                            builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    StartActivity.this.nouvellePartie();
+                                }
+                            });
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
                         }
                     } catch (ColonneInvalideException e) {
                         Toast.makeText(StartActivity.this,"Vous ne pouvez pas jouer sur cette colonne",Toast.LENGTH_LONG).show();
@@ -102,7 +148,6 @@ public class StartActivity extends AppCompatActivity {
                         Toast.makeText(StartActivity.this,"joueur invalide",Toast.LENGTH_LONG).show();
                         e.printStackTrace();
                     }
-//                    Toast.makeText(StartActivity.this,"Joueur suivant",Toast.LENGTH_LONG).show();
                 }
 
                 private void placementPion(Joueur joueurCoutant) {
