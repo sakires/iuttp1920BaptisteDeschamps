@@ -23,7 +23,7 @@ import com.iutlr.puissance4.exceptions.PlateauInvalideException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StartActivity extends AppCompatActivity {
+public class StartActivity<etatPartie> extends AppCompatActivity {
 
     private TextView textJ1;
     private TextView textJ2;
@@ -39,7 +39,9 @@ public class StartActivity extends AppCompatActivity {
 
     private LinearLayout plateauDeJeux;
     private List<Joueur> joueurs;
+    private String[] nomJoueur;
     private Plateau plateau;
+    private EtatPartie etatPartie;
 
     private int hauteur;
     private int largeur;
@@ -56,6 +58,7 @@ public class StartActivity extends AppCompatActivity {
         this.hauteur = Integer.parseInt(intent.getStringExtra("HAUTEUR"));
         this.largeur = Integer.parseInt(intent.getStringExtra("LARGEUR"));
         this.nbJoueur = intent.getIntExtra("NBJOUEUR",2);
+        this.nomJoueur = intent.getStringArrayExtra("NOMJOUEUR");
 
         initGame();
     }
@@ -69,7 +72,7 @@ public class StartActivity extends AppCompatActivity {
         initField();
         this.joueurs = new ArrayList<Joueur>();
         initJoueur(nbJoueur);
-
+        this.etatPartie = EtatPartie.EN_COURS;
         try {
             this.plateau = new Plateau(largeur,hauteur,this.joueurs);
         } catch (PlateauInvalideException e) {
@@ -94,60 +97,62 @@ public class StartActivity extends AppCompatActivity {
             colonne.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try {
-                        Joueur joueurCoutant = plateau.getJoueurCourant();
-                        EtatPartie etatPartie = plateau.jouer(joueurCoutant,fi);
-                        placementPion(joueurCoutant);
-                        if (etatPartie.equals(EtatPartie.VICTOIRE)){
-                            AlertDialog.Builder builder = new AlertDialog.Builder(StartActivity.this);
-                            builder.setMessage("GG WP, "+plateau.getGagnant().getNom()+" tu as gagner,\n Voulez-vous rejouez avec les memes régalges");
-                            builder.setNegativeButton("Non", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent menuPrincipale = new Intent(StartActivity.this,ConfigurateActivity.class);
-                                    startActivity(menuPrincipale);
-                                    StartActivity.this.finish();
-                                }
-                            });
-                            builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    StartActivity.this.nouvellePartie();
-                                }
-                            });
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
+                        try {
+                            if(etatPartie.equals(EtatPartie.EN_COURS)){
+                                Joueur joueurCoutant = plateau.getJoueurCourant();
+                                etatPartie = plateau.jouer(joueurCoutant,fi);
+                                placementPion(joueurCoutant);
+                            }
+                            if (etatPartie.equals(EtatPartie.VICTOIRE)){
+                                AlertDialog.Builder builder = new AlertDialog.Builder(StartActivity.this);
+                                builder.setMessage("GG WP, "+plateau.getGagnant().getNom()+" tu as gagner,\n Voulez-vous rejouez avec les memes régalges");
+                                builder.setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent menuPrincipale = new Intent(StartActivity.this,ConfigurateActivity.class);
+                                        startActivity(menuPrincipale);
+                                        StartActivity.this.finish();
+                                    }
+                                });
+                                builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        StartActivity.this.nouvellePartie();
+                                    }
+                                });
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            }
+                            if (etatPartie.equals(EtatPartie.EGAL)){
+                                AlertDialog.Builder builder = new AlertDialog.Builder(StartActivity.this);
+                                builder.setMessage("Egalité, \n Voulez-vous rejouez avec les memes régalges");
+                                builder.setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent menuPrincipale = new Intent(StartActivity.this,ConfigurateActivity.class);
+                                        startActivity(menuPrincipale);
+                                        StartActivity.this.finish();
+                                    }
+                                });
+                                builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        StartActivity.this.nouvellePartie();
+                                    }
+                                });
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            }
+                        } catch (ColonneInvalideException e) {
+                            Toast.makeText(StartActivity.this,"Vous ne pouvez pas jouer sur cette colonne",Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+                        } catch (ColonnePleineException e) {
+                            Toast.makeText(StartActivity.this,"Cette colonne est pleine",Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+                        } catch (JoueurException e) {
+                            Toast.makeText(StartActivity.this,"joueur invalide",Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
                         }
-                        if (etatPartie.equals(EtatPartie.EGAL)){
-                            AlertDialog.Builder builder = new AlertDialog.Builder(StartActivity.this);
-                            builder.setMessage("Egalité, \n Voulez-vous rejouez avec les memes régalges");
-                            builder.setNegativeButton("Non", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent menuPrincipale = new Intent(StartActivity.this,ConfigurateActivity.class);
-                                    startActivity(menuPrincipale);
-                                    StartActivity.this.finish();
-                                }
-                            });
-                            builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    StartActivity.this.nouvellePartie();
-                                }
-                            });
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
-                        }
-                    } catch (ColonneInvalideException e) {
-                        Toast.makeText(StartActivity.this,"Vous ne pouvez pas jouer sur cette colonne",Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-                    } catch (ColonnePleineException e) {
-                        Toast.makeText(StartActivity.this,"Cette colonne est pleine",Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-                    } catch (JoueurException e) {
-                        Toast.makeText(StartActivity.this,"joueur invalide",Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-                    }
                 }
 
                 private void placementPion(Joueur joueurCoutant) {
@@ -185,26 +190,31 @@ public class StartActivity extends AppCompatActivity {
         if(nbJoueur >= 2){
             this.textJ1.setVisibility(View.VISIBLE);
             this.imageJ1.setVisibility(View.VISIBLE);
-            this.joueurs.add(new Joueur("Joueur 1",this.imageJ1.getId()));
+            this.textJ1.setText(this.nomJoueur[0]);
+            this.joueurs.add(new Joueur(this.nomJoueur[0],this.imageJ1.getId()));
 
             this.imageJ2.setVisibility(View.VISIBLE);
             this.textJ2.setVisibility(View.VISIBLE);
-            this.joueurs.add(new Joueur("Joueur 2",this.imageJ2.getId()));
+            this.textJ2.setText(this.nomJoueur[1]);
+            this.joueurs.add(new Joueur(this.nomJoueur[1],this.imageJ2.getId()));
         }
         if (nbJoueur >= 3){
             this.textJ3.setVisibility(View.VISIBLE);
             this.imageJ3.setVisibility(View.VISIBLE);
-            this.joueurs.add(new Joueur("Joueur 3",this.imageJ3.getId()));
+            this.textJ3.setText(this.nomJoueur[2]);
+            this.joueurs.add(new Joueur(this.nomJoueur[2],this.imageJ3.getId()));
         }
         if (nbJoueur >= 4){
             this.textJ4.setVisibility(View.VISIBLE);
             this.imageJ4.setVisibility(View.VISIBLE);
-            this.joueurs.add(new Joueur("Joueur 4",this.imageJ4.getId()));
+            this.textJ4.setText(this.nomJoueur[3]);
+            this.joueurs.add(new Joueur(this.nomJoueur[3],this.imageJ4.getId()));
         }
         if (nbJoueur >= 5){
             this.textJ5.setVisibility(View.VISIBLE);
             this.imageJ5.setVisibility(View.VISIBLE);
-            this.joueurs.add(new Joueur("Joueur 5",this.imageJ5.getId()));
+            this.textJ5.setText(this.nomJoueur[4]);
+            this.joueurs.add(new Joueur(this.nomJoueur[4],this.imageJ5.getId()));
         }
     }
 
