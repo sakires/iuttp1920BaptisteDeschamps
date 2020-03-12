@@ -3,8 +3,10 @@ package com.iutlr.puissance4;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -20,6 +22,11 @@ import com.iutlr.puissance4.exceptions.ColonnePleineException;
 import com.iutlr.puissance4.exceptions.JoueurException;
 import com.iutlr.puissance4.exceptions.PlateauInvalideException;
 
+import org.json.JSONException;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +47,7 @@ public class StartActivity<etatPartie> extends AppCompatActivity {
     private LinearLayout plateauDeJeux;
     private List<Joueur> joueurs;
     private String[] nomJoueur;
+    private String[] imageJoueur;
     private Plateau plateau;
     private EtatPartie etatPartie;
 
@@ -59,6 +67,7 @@ public class StartActivity<etatPartie> extends AppCompatActivity {
         this.largeur = Integer.parseInt(intent.getStringExtra("LARGEUR"));
         this.nbJoueur = intent.getIntExtra("NBJOUEUR",2);
         this.nomJoueur = intent.getStringArrayExtra("NOMJOUEUR");
+        this.imageJoueur = intent.getStringArrayExtra("IMAGEJOUEUR");
 
         initGame();
     }
@@ -186,35 +195,100 @@ public class StartActivity<etatPartie> extends AppCompatActivity {
         }
     }
 
+    private ImageView quelleImage(int numeroJoueur) throws JoueurException {
+        switch (numeroJoueur){
+            case 0:
+                return this.imageJ1;
+            case 1:
+                return this.imageJ2;
+            case 2:
+                return this.imageJ3;
+            case 3:
+                return this.imageJ4;
+            case 4:
+                return this.imageJ5;
+            default:
+                throw new JoueurException();
+        }
+    }
+    private void initImage(int numeroJoueur){
+        Drawable imageSelect;
+        try{
+        switch (this.imageJoueur[numeroJoueur]){
+            case "RED":
+                this.quelleImage(numeroJoueur).setBackgroundColor(Color.RED);
+                break;
+            case "BLUE":
+                this.quelleImage(numeroJoueur).setBackgroundColor(Color.BLUE);
+                break;
+            case "GREEN":
+                this.quelleImage(numeroJoueur).setBackgroundColor(Color.GREEN);
+                break;
+            case "YELLOW":
+                this.quelleImage(numeroJoueur).setBackgroundColor(Color.YELLOW);
+                break;
+            case "GRAY":
+                this.quelleImage(numeroJoueur).setBackgroundColor(Color.GRAY);
+                break;
+            case "BLACK":
+                this.quelleImage(numeroJoueur).setBackgroundColor(Color.BLACK);
+                break;
+            default:
+                Uri imagePath = Uri.parse(this.imageJoueur[numeroJoueur]);
+                InputStream inputStream = getContentResolver().openInputStream(imagePath);
+                imageSelect = Drawable.createFromStream(inputStream, imagePath.toString() );
+                this.quelleImage(numeroJoueur).setImageDrawable(imageSelect);
+
+        }
+        }catch (FileNotFoundException e){
+            Toast.makeText(this,"Erreur, l image n'a pas pu être recuperer",Toast.LENGTH_LONG).show();
+            try {
+                this.quelleImage(numeroJoueur).setBackgroundColor(Color.BLACK);
+            } catch (JoueurException ex) {
+                Toast.makeText(this,"Erreur, le nombre de joueur est incorrect",Toast.LENGTH_LONG).show();
+                ex.printStackTrace();
+            }
+        }catch (JoueurException e){
+            Toast.makeText(this,"Erreur, le nombre de joueur est incorrect",Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+
+
+    }
     private void initJoueur(int nbJoueur) {
         if(nbJoueur >= 2){
             this.textJ1.setVisibility(View.VISIBLE);
             this.imageJ1.setVisibility(View.VISIBLE);
             this.textJ1.setText(this.nomJoueur[0]);
             this.joueurs.add(new Joueur(this.nomJoueur[0],this.imageJ1.getId()));
+            initImage(0);
 
             this.imageJ2.setVisibility(View.VISIBLE);
             this.textJ2.setVisibility(View.VISIBLE);
             this.textJ2.setText(this.nomJoueur[1]);
             this.joueurs.add(new Joueur(this.nomJoueur[1],this.imageJ2.getId()));
+            initImage(1);
         }
         if (nbJoueur >= 3){
             this.textJ3.setVisibility(View.VISIBLE);
             this.imageJ3.setVisibility(View.VISIBLE);
             this.textJ3.setText(this.nomJoueur[2]);
             this.joueurs.add(new Joueur(this.nomJoueur[2],this.imageJ3.getId()));
+            initImage(2);
         }
         if (nbJoueur >= 4){
             this.textJ4.setVisibility(View.VISIBLE);
             this.imageJ4.setVisibility(View.VISIBLE);
             this.textJ4.setText(this.nomJoueur[3]);
             this.joueurs.add(new Joueur(this.nomJoueur[3],this.imageJ4.getId()));
+            initImage(3);
         }
         if (nbJoueur >= 5){
             this.textJ5.setVisibility(View.VISIBLE);
             this.imageJ5.setVisibility(View.VISIBLE);
             this.textJ5.setText(this.nomJoueur[4]);
             this.joueurs.add(new Joueur(this.nomJoueur[4],this.imageJ5.getId()));
+            initImage(4);
         }
     }
 

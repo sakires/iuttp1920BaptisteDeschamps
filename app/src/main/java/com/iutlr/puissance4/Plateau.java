@@ -166,7 +166,7 @@ public class Plateau {
     private boolean victoireVertical(Joueur j, int posX, int posY){
         int compteur = 0;
         int y = posY;
-        //test victoire vertical
+        //test victoire vertical premiere boucle pas besoin car on entasse les pions
 //        while (y<haureur && this.plateau[posX][y] == j.getImageResId()){
 //            compteur++;
 //            y++;
