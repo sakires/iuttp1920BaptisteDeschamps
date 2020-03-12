@@ -141,9 +141,9 @@ public class ConfigurateActivity extends AppCompatActivity {
                     Toast.makeText(ConfigurateActivity.this,ConfigurateActivity.this.getString(R.string.LargeurPlateauError)+Plateau.LARGEUR_MIN,Toast.LENGTH_LONG).show();
                 } else{
                     Intent startPartie = new Intent(ConfigurateActivity.this,StartActivity.class);
-                    startPartie.putExtra("NBJOUEUR",nbJoueur);
-                    startPartie.putExtra("HAUTEUR",hauteur.getText().toString());
-                    startPartie.putExtra("LARGEUR",largeur.getText().toString());
+                    startPartie.putExtra(ConstanteIntent.NBJOUEUR,nbJoueur);
+                    startPartie.putExtra(ConstanteIntent.HAUTEUR,hauteur.getText().toString());
+                    startPartie.putExtra(ConstanteIntent.LARGEUR,largeur.getText().toString());
                     for(int i = 0;i<listeParametreJoueur.size();i++){
                         if (listeParametreJoueur.get(i).getText().toString().equals("")){
                             listeNom.add(listeParametreJoueur.get(i).getHint().toString());
@@ -152,8 +152,8 @@ public class ConfigurateActivity extends AppCompatActivity {
                         }
                     }
 
-                    startPartie.putExtra("NOMJOUEUR",listeNom.toArray(new String[0]));
-                    startPartie.putExtra("IMAGEJOUEUR",listPathImage.toArray(new String[0]));
+                    startPartie.putExtra(ConstanteIntent.NOMJOUEUR,listeNom.toArray(new String[0]));
+                    startPartie.putExtra(ConstanteIntent.IMAGEJOUEUR,listPathImage.toArray(new String[0]));
 
                     startActivity(startPartie);
                     finish();

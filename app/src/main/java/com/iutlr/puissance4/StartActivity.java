@@ -63,11 +63,11 @@ public class StartActivity<etatPartie> extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        this.hauteur = Integer.parseInt(intent.getStringExtra("HAUTEUR"));
-        this.largeur = Integer.parseInt(intent.getStringExtra("LARGEUR"));
-        this.nbJoueur = intent.getIntExtra("NBJOUEUR",2);
-        this.nomJoueur = intent.getStringArrayExtra("NOMJOUEUR");
-        this.imageJoueur = intent.getStringArrayExtra("IMAGEJOUEUR");
+        this.hauteur = Integer.parseInt(intent.getStringExtra(ConstanteIntent.HAUTEUR));
+        this.largeur = Integer.parseInt(intent.getStringExtra(ConstanteIntent.LARGEUR));
+        this.nbJoueur = intent.getIntExtra(ConstanteIntent.NBJOUEUR,2);
+        this.nomJoueur = intent.getStringArrayExtra(ConstanteIntent.NOMJOUEUR);
+        this.imageJoueur = intent.getStringArrayExtra(ConstanteIntent.IMAGEJOUEUR);
 
         initGame();
     }
@@ -153,7 +153,7 @@ public class StartActivity<etatPartie> extends AppCompatActivity {
                                 dialog.show();
                             }
                         } catch (ColonneInvalideException e) {
-                            Toast.makeText(StartActivity.this,"Vous ne pouvez pas jouer sur cette colonne",Toast.LENGTH_LONG).show();
+                            Toast.makeText(StartActivity.this, "Vous ne pouvez pas jouer sur cette colonne",Toast.LENGTH_LONG).show();
                             e.printStackTrace();
                         } catch (ColonnePleineException e) {
                             Toast.makeText(StartActivity.this,"Cette colonne est pleine",Toast.LENGTH_LONG).show();
